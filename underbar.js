@@ -133,12 +133,50 @@
         // set initialize to false so it doesn't run again
         initialize = false;
       } else {
-      	// else accumulator is equal to resut of running iterator on item,
+      	// else accumulator is equal to result of running iterator on item,
       	// reducing collection to single value
         accumulator = iterator(accumulator, value);
       }  
     });
     return accumulator;
+  };
+
+  // Determine if the array or object contains a given value (using `===`).
+  _.contains = function(collection, target) {
+    return _.reduce(collection, function(wasFound, item) {
+      if (wasFound) {
+        return true;
+      }
+      return item === target;
+    }, false);
+  };
+
+  // Determine whether all of the elements match a truth test.
+  _.every = function(collection, iterator) {
+    if(iterator){
+      iterator = iterator;
+    } else {
+      iterator = _.identity;
+    }
+
+    // inverted boolean "!!" converts nonbooleans like numbers and strings, into booleans    
+    return !!_.reduce(collection, function(accumulator, value){
+      return accumulator && iterator(value);
+    }, true);
+  };
+
+  // Determine whether any of the elements pass a truth test. If no iterator is
+  // provided, provide a default one
+  _.some = function(collection, iterator) {
+    if(iterator){
+      iterator = iterator;
+    } else {
+      iterator = _.identity;
+    }
+    
+    return !_.every(collection, function(value){
+      return !iterator(value);
+    });
   };
 
 }()); 
