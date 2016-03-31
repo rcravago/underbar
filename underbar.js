@@ -179,4 +179,41 @@
     });
   };
 
+  /*
+   * OBJECTS
+   * =======
+   * In this section, we'll look at a couple of helpers for merging objects.
+   */
+
+  // Extend a given object with all the properties of the passed in object(s).
+  //
+  // Example:
+  //   var obj1 = {key1: "one"};
+  //   _.extend(obj1, {
+  //     key2: "two",
+  //     key3: "three"
+  //   }, {
+  //     key4: "four"
+  //   }); // obj1 now contains key1, key2, key3 and key4
+  _.extend = function(obj) {
+    for(var i = 1; i < arguments.length; i++){
+      for(var key in arguments[i]){
+        obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
+  };
+
+  // Like extend, but doesn't ever overwrite a key that already exists in obj
+  _.defaults = function(obj) {
+    for(var i = 1; i < arguments.length; i++){
+      for(var key in arguments[i]){
+        if(!(key in obj)){
+          obj[key] = arguments[i][key];
+        }
+      }
+    }
+    return obj;
+  };
+
 }()); 
