@@ -37,7 +37,7 @@
   _.each = function(collection, iterator){
   	if(Array.isArray(collection)){
   		for(var i = 0; i < collection.length; i++){
-				iterator(collection[i], i, collection);  			
+				iterator(collection[i], i, collection);
   		}
   	} else {
   		for(var key in collection){
@@ -95,7 +95,7 @@
   // Return same output length as input
   _.map = function(collection, iterator) {
     var results = [];
-    
+
     _.each(collection, function(value){
       results.push(iterator(value));
     });
@@ -114,7 +114,7 @@
   // Reduces an array or object to a single value by repetitively calling
   // iterator(accumulator, item) for each item. accumulator should be
   // the return value of the previous iterator call.
-  //  
+  //
   // You can pass in a starting value for the accumulator as the third argument
   // to reduce. If no starting value is passed, the first element is used as
   // the accumulator, and is never passed to the iterator. In other words, in
@@ -136,7 +136,7 @@
       	// else accumulator is equal to result of running iterator on item,
       	// reducing collection to single value
         accumulator = iterator(accumulator, value);
-      }  
+      }
     });
     return accumulator;
   };
@@ -159,7 +159,7 @@
       iterator = _.identity;
     }
 
-    // inverted boolean "!!" converts nonbooleans like numbers and strings, into booleans    
+    // inverted boolean "!!" converts nonbooleans like numbers and strings, into booleans
     return !!_.reduce(collection, function(accumulator, value){
       return accumulator && iterator(value);
     }, true);
@@ -173,7 +173,7 @@
     } else {
       iterator = _.identity;
     }
-    
+
     return !_.every(collection, function(value){
       return !iterator(value);
     });
@@ -216,4 +216,61 @@
     return obj;
   };
 
-}()); 
+  /**
+   * FUNCTIONS
+   * =========
+   *
+   * Function decorators take in any function and return out a new version of the function that works somewhat differently
+   */
+
+  // Return a function that can be called at most one time. Subsequent calls
+  // should return the previously returned value.
+  _.once = function(func) {
+    var called = false;
+    var result;
+
+    return function() {
+      if (called) {
+        // pass info from one function call to another using .apply(this, arguments)
+        result = func.apply(this, arguments);
+        called = true;
+      }
+      // The new function always returns the originally computed result.
+      return result;
+    };
+  };
+
+  // Memorize an expensive function's results by storing them. You may assume
+  // that the function only takes primitives as arguments.
+  //
+  // _.memoize should return a function that, when called, will check if it has
+  // already computed the result for the given argument and return that value
+  // instead if possible.
+  _.memoize = function(func) {
+    var storage = {};
+
+    return function(result){
+      return (result in storage) ? (storage[result]) : (storage[result] = func.apply(this, arguments));
+    };
+  };
+
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  //
+  // The arguments for the original function are passed after the wait
+  // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
+  // call someFunction('a', 'b') after 500ms
+  _.delay = function(func, wait) {
+    // define variable to store array of copy of arguments passed from index 2 to the end
+    // closure can now access optional arguments passed
+    var args = Array.prototype.slice.call(arguments, 2);
+
+    // return setTimeout function that delays
+    // running callback function, that accepts any number of arguments (aka variadic function)
+    // after given number of milliseconds
+    return setTimeout(function(){
+      return func.apply(this, args);
+    }, wait);
+  };
+
+}());
