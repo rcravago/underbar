@@ -1,2 +1,2 @@
 # underbar
-Re-implement underscore.js library in JavaScript
+Re-implemented underscore.js library in JavaScript
